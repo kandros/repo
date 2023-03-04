@@ -16,7 +16,7 @@ func GetRepos(githuAccessToken string) []*github.Repository {
 	client := github.NewClient(tc)
 
 	opts := &github.RepositoryListOptions{
-		Affiliation: "owner,collaborator",
+		Affiliation: "owner,organization_member",
 		Sort:        "updated",
 		Direction:   "desc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: 10},

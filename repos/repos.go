@@ -17,7 +17,8 @@ func GetRepos(githuAccessToken string) []*github.Repository {
 
 	opts := &github.RepositoryListOptions{
 		Affiliation: "owner,collaborator",
-		Visibility:  "private", Sort: "updated", Direction: "desc",
+		Sort:        "updated",
+		Direction:   "desc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: 10},
 	}
 

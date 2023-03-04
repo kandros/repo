@@ -110,6 +110,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			m.showRepoFolderInput = true
 			return m, tea.Quit
+		case "x":
+			if m.showRepoFolderInput {
+				return m, tea.EnterAltScreen
+			} else {
+				m.showRepoFolderInput = false
+				return m, tea.ExitAltScreen
+			}
+
 		}
 	}
 

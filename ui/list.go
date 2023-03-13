@@ -56,6 +56,7 @@ type model struct {
 	list                list.Model
 	choice              string
 	quitting            bool
+	quitText            string
 	showRepoFolderInput bool
 	repos               []*github.Repository
 	inputModel          inputModel
@@ -83,10 +84,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter":
 			i, ok := m.list.SelectedItem().(item)
+			choice := string(i)
 			if ok {
-				m.choice = string(i)
+				m.choice = choice
 			}
 			clipboard.Write(clipboard.FmtText, []byte(m.selectedRepo().GetHTMLURL()))
+			m.quitText = "Copied to clipboard: " + choice
 			m.quitting = true
 			return m, tea.Quit
 		case "o":
@@ -132,8 +135,7 @@ func (m model) View() string {
 	}
 
 	if m.quitting {
-
-		return quitTextStyle.Render(fmt.Sprintf("%s? copied to clipboard.", m.choice))
+		return quitTextStyle.Render(fmt.Sprintf("%s", m.quitText))
 	}
 	return "\n" + m.list.View()
 }

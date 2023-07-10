@@ -143,11 +143,15 @@ func (m model) View() string {
 var (
 	keyO = key.NewBinding(
 		key.WithKeys("o"),
-		key.WithHelp("o", "open"),
+		key.WithHelp("[o]", "open link"),
+	)
+	keyEnter = key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("[enter]", "copy link to clipboard"),
 	)
 	keyC = key.NewBinding(
-		key.WithKeys("o"),
-		key.WithHelp("c", "clone"),
+		key.WithKeys("c"),
+		key.WithHelp("[c]", "clone"),
 	)
 )
 
@@ -169,7 +173,7 @@ func List(repos []*github.Repository) {
 	l.Styles.HelpStyle = helpStyle
 
 	customKeys := func() []key.Binding {
-		return []key.Binding{keyO}
+		return []key.Binding{keyO, keyC, keyEnter}
 	}
 	l.AdditionalShortHelpKeys = customKeys
 	l.AdditionalFullHelpKeys = customKeys

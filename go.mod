@@ -3,8 +3,14 @@ module repo
 go 1.20
 
 require (
+	github.com/charmbracelet/bubbles v0.15.0
+	github.com/charmbracelet/bubbletea v0.23.2
+	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/google/go-github/v50 v50.1.0
 	github.com/sanity-io/litter v1.5.5
+	golang.design/x/clipboard v0.6.3
+	golang.org/x/oauth2 v0.5.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -13,9 +19,6 @@ require (
 	github.com/acomagu/bufpipe v1.0.4 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52 v1.2.2 // indirect
-	github.com/charmbracelet/bubbles v0.15.0 // indirect
-	github.com/charmbracelet/bubbletea v0.23.2 // indirect
-	github.com/charmbracelet/lipgloss v0.6.0 // indirect
 	github.com/cloudflare/circl v1.3.2 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
@@ -41,15 +44,13 @@ require (
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.design/x/clipboard v0.6.3 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
-	golang.org/x/exp/shiny v0.0.0-20230224173230-c95f2b4c22f2 // indirect
+	golang.org/x/exp/shiny v0.0.0-20230626212559-97b1e661b5df // indirect
 	golang.org/x/image v0.5.0 // indirect
 	golang.org/x/mobile v0.0.0-20230301163155-e0f57694e12c // indirect
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/oauth2 v0.5.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/term v0.5.0 // indirect
@@ -58,5 +59,4 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

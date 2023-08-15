@@ -7,7 +7,11 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func GetRepos(githuAccessToken string) []*github.Repository {
+type RepoOptions struct {
+	NumberOfResults int
+}
+
+func GetRepos(githuAccessToken string, repoOpts RepoOptions) []*github.Repository {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: githuAccessToken},
@@ -19,7 +23,7 @@ func GetRepos(githuAccessToken string) []*github.Repository {
 		Affiliation: "owner,organization_member",
 		Sort:        "updated",
 		Direction:   "desc",
-		ListOptions: github.ListOptions{Page: 1, PerPage: 10},
+		ListOptions: github.ListOptions{Page: 1, PerPage: repoOpts.numberOfResults},
 	}
 
 	repos, _, err := client.Repositories.List(ctx, "", opts)

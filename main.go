@@ -8,7 +8,7 @@ import (
 func main() {
 	token := getGithubAccessToken()
 
-	repos := repos.GetRepos(token)
+	repos := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20})
 
 	ui.List(repos)
 }

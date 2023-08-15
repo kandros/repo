@@ -23,7 +23,7 @@ func GetRepos(githuAccessToken string, repoOpts RepoOptions) []*github.Repositor
 		Affiliation: "owner,organization_member",
 		Sort:        "updated",
 		Direction:   "desc",
-		ListOptions: github.ListOptions{Page: 1, PerPage: repoOpts.numberOfResults},
+		ListOptions: github.ListOptions{Page: 1, PerPage: repoOpts.NumberOfResults},
 	}
 
 	repos, _, err := client.Repositories.List(ctx, "", opts)

@@ -103,15 +103,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "c":
 			selectedRepo := m.selectedRepo()
 
-			cmd := exec.Command("git", "clone", selectedRepo.GetCloneURL())
+			url := selectedRepo.GetCloneURL()
+			cmd := exec.Command("git", "clone", url)
 			/* renderizzare input per chiedere nome della cartella dove clonare */
 			cmd.Stdout = os.Stdout
 			err := cmd.Start()
 			if err != nil {
 				panic(err)
 			}
+			m.quitText = "Cloned: " + url + " to ./" + *selectedRepo.Name
 			m.quitting = true
-			m.showRepoFolderInput = true
+			// m.showRepoFolderInput = true
 			return m, tea.Quit
 		case "x":
 			if m.showRepoFolderInput {
@@ -130,9 +132,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	if m.showRepoFolderInput {
-		return "\n" + m.inputModel.View()
-	}
+	// if m.showRepoFolderInput {
+	// 	return "\n" + m.inputModel.View()
+	// }
 
 	if m.quitting {
 		return quitTextStyle.Render(fmt.Sprintf("%s", m.quitText))

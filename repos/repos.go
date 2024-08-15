@@ -11,7 +11,7 @@ type RepoOptions struct {
 	NumberOfResults int
 }
 
-func GetRepos(githubAccessToken string, repoOpts RepoOptions) []*github.Repository {
+func GetRepos(githubAccessToken string, repoOpts RepoOptions, publicOnly bool) []*github.Repository {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: githubAccessToken},
@@ -24,6 +24,10 @@ func GetRepos(githubAccessToken string, repoOpts RepoOptions) []*github.Reposito
 		Sort:        "updated",
 		Direction:   "desc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: repoOpts.NumberOfResults},
+	}
+
+	if publicOnly {
+		opts.Visibility = "public"
 	}
 
 	repos, _, err := client.Repositories.List(ctx, "", opts)

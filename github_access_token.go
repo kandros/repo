@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -16,7 +15,7 @@ func getGithubAccessToken() string {
 
 	configPath := home + "/.config/gh/hosts.yml"
 
-	yfile, err := ioutil.ReadFile(configPath)
+	yfile, err := os.ReadFile(configPath)
 	if err != nil {
 		log.Fatal(err)
 	}

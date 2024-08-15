@@ -11,10 +11,10 @@ type RepoOptions struct {
 	NumberOfResults int
 }
 
-func GetRepos(githuAccessToken string, repoOpts RepoOptions) []*github.Repository {
+func GetRepos(githubAccessToken string, repoOpts RepoOptions) []*github.Repository {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: githuAccessToken},
+		&oauth2.Token{AccessToken: githubAccessToken},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)

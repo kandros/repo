@@ -18,3 +18,4 @@ repo
 
 # binaries from goreleaser
 dist/
+tmp/

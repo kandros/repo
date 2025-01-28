@@ -6,3 +6,6 @@ This is a command-line application built with Go and [Bubble Tea](https://github
 
 ## Installation
 clone repo and run `make install`
+
+## Setup
+This app uses the same auth token used by the [official GitHub CLI (gh)](https://cli.github.com/)

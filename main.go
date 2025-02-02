@@ -2,12 +2,19 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 	"repo/repos"
 	"repo/ui"
 )
 
 func main() {
-	token := getGithubAccessToken()
+	token, err := getGithubAccessToken()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+
 	onlyPublicRepository := flag.Bool("p", false, "Set to true to only list public repositories")
 
 	flag.Parse()

@@ -23,7 +23,7 @@ lazy:
 	git push
 	git push --tags
 
-VERSION := $(shell git describe --tags --always --dirty)
+VERSION := $(shell git describe --tags --abbrev=0)
 LDFLAGS := -ldflags "-X main.version=$(VERSION)"
 
 build:

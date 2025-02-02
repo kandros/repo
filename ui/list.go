@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -103,16 +104,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "c":
 			selectedRepo := m.selectedRepo()
-
 			url := selectedRepo.GetCloneURL()
-			cmd := exec.Command("git", "clone", url)
-			/* renderizzare input per chiedere nome della cartella dove clonare */
-			cmd.Stdout = os.Stdout
-			err := cmd.Start()
+
+			// Get current working directory
+			cwd, err := os.Getwd()
 			if err != nil {
 				panic(err)
 			}
-			m.quitText = "Cloned: " + url + " to ./" + *selectedRepo.Name
+
+			cmd := exec.Command("git", "clone", url)
+			cmd.Stdout = os.Stdout
+			err = cmd.Start()
+			if err != nil {
+				panic(err)
+			}
+
+			// Use filepath.Join for cross-platform path handling
+			clonePath := filepath.Join(cwd, *selectedRepo.Name)
+			m.quitText = "Cloned: " + url + " to " + clonePath
 			m.quitting = true
 			// m.showRepoFolderInput = true
 			return m, tea.Quit

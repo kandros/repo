@@ -121,13 +121,23 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 			clonePath := filepath.Join(cwd, *selectedRepo.Name)
+
+			// Check if directory already exists
+			if _, err := os.Stat(clonePath); !os.IsNotExist(err) {
+				m.quitText = fmt.Sprintf("Error: Directory '%s' already exists", clonePath)
+				m.quitting = true
+				return m, tea.Quit
+			}
+
 			_, err = git.PlainClone(clonePath, false, &git.CloneOptions{
 				URL:      url,
 				Progress: os.Stdout,
 				Auth:     auth,
 			})
 			if err != nil {
-				panic(err)
+				m.quitText = fmt.Sprintf("Error cloning repository: %v", err)
+				m.quitting = true
+				return m, tea.Quit
 			}
 
 			m.quitText = "Cloned: " + url + " to " + clonePath

@@ -22,3 +22,9 @@ lazy:
 	@./scripts/version.sh minor
 	git push
 	git push --tags
+
+VERSION := $(shell git describe --tags --always --dirty)
+LDFLAGS := -ldflags "-X main.version=$(VERSION)"
+
+build:
+	go build $(LDFLAGS) -o ./repo

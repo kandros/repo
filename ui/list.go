@@ -11,6 +11,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/google/go-github/v50/github"
 	"golang.design/x/clipboard"
 )
@@ -61,6 +63,7 @@ type model struct {
 	showRepoFolderInput bool
 	repos               []*github.Repository
 	inputModel          inputModel
+	githubToken         string
 }
 
 func (m model) Init() tea.Cmd {
@@ -112,15 +115,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				panic(err)
 			}
 
-			cmd := exec.Command("git", "clone", url)
-			cmd.Stdout = os.Stdout
-			err = cmd.Start()
+			auth := &http.BasicAuth{
+				Username: "doesnt-matter",
+				Password: m.githubToken,
+			}
+
+			clonePath := filepath.Join(cwd, *selectedRepo.Name)
+			_, err = git.PlainClone(clonePath, false, &git.CloneOptions{
+				URL:      url,
+				Progress: os.Stdout,
+				Auth:     auth,
+			})
 			if err != nil {
 				panic(err)
 			}
 
-			// Use filepath.Join for cross-platform path handling
-			clonePath := filepath.Join(cwd, *selectedRepo.Name)
 			m.quitText = "Cloned: " + url + " to " + clonePath
 			m.quitting = true
 			// m.showRepoFolderInput = true
@@ -167,7 +176,7 @@ var (
 	)
 )
 
-func List(repos []*github.Repository) {
+func List(repos []*github.Repository, githubToken string) {
 	var items []list.Item
 
 	for _, repo := range repos {
@@ -190,7 +199,7 @@ func List(repos []*github.Repository) {
 	l.AdditionalShortHelpKeys = customKeys
 	l.AdditionalFullHelpKeys = customKeys
 
-	m := model{list: l, repos: repos}
+	m := model{list: l, repos: repos, githubToken: githubToken}
 
 	if _, err := tea.NewProgram(m).Run(); err != nil {
 		fmt.Println("Error running program:", err)

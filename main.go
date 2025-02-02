@@ -20,5 +20,5 @@ func main() {
 	flag.Parse()
 	repos := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository)
 
-	ui.List(repos)
+	ui.List(repos, token)
 }

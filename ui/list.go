@@ -88,8 +88,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if ok {
 				m.choice = choice
 			}
-			clipboard.Write(clipboard.FmtText, []byte(m.selectedRepo().GetHTMLURL()))
-			m.quitText = "Copied to clipboard: " + choice
+			repoUrl := m.selectedRepo().GetHTMLURL()
+			clipboard.Write(clipboard.FmtText, []byte(repoUrl))
+			m.quitText = "Copied to clipboard: " + repoUrl
 			m.quitting = true
 			return m, tea.Quit
 		case "o":

@@ -11,7 +11,7 @@ You can install using one of these methods:
 ### Option 1: Using install script
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kandros/repo/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kandros/repo/master/install.sh | bash
 ```
 
 ### Option 2: Manual installation

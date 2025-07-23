@@ -34,7 +34,11 @@ func main() {
 	onlyPublicRepository := flag.Bool("p", false, "Set to true to only list public repositories")
 
 	flag.Parse()
-	repos := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository)
+	repoList, err := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
-	ui.List(repos, token)
+	ui.List(repoList, token)
 }

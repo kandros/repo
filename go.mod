@@ -9,6 +9,7 @@ require (
 	github.com/go-git/go-git/v5 v5.6.0
 	github.com/google/go-github/v50 v50.1.0
 	github.com/sanity-io/litter v1.5.5
+	github.com/stretchr/testify v1.8.4
 	golang.design/x/clipboard v0.6.3
 	golang.org/x/oauth2 v0.5.0
 	gopkg.in/yaml.v3 v3.0.1

@@ -1,0 +1,30 @@
+[
+  {
+    "id": 123456789,
+    "name": "test-repo",
+    "full_name": "testuser/test-repo",
+    "html_url": "https://github.com/testuser/test-repo",
+    "clone_url": "https://github.com/testuser/test-repo.git",
+    "private": false,
+    "owner": {
+      "login": "testuser",
+      "id": 12345,
+      "type": "User"
+    },
+    "updated_at": "2023-01-15T10:30:00Z"
+  },
+  {
+    "id": 987654321,
+    "name": "another-repo",
+    "full_name": "testuser/another-repo",
+    "html_url": "https://github.com/testuser/another-repo",
+    "clone_url": "https://github.com/testuser/another-repo.git",
+    "private": false,
+    "owner": {
+      "login": "testuser",
+      "id": 12345,
+      "type": "User"
+    },
+    "updated_at": "2023-01-10T15:45:30Z"
+  }
+]

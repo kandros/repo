@@ -1,0 +1,16 @@
+[
+  {
+    "id": 111222333,
+    "name": "org-repo",
+    "full_name": "testorg/org-repo",
+    "html_url": "https://github.com/testorg/org-repo",
+    "clone_url": "https://github.com/testorg/org-repo.git",
+    "private": false,
+    "owner": {
+      "login": "testorg",
+      "id": 54321,
+      "type": "Organization"
+    },
+    "updated_at": "2023-01-25T14:20:00Z"
+  }
+]

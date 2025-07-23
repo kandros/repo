@@ -1,0 +1,16 @@
+[
+  {
+    "id": 555666777,
+    "name": "private-repo",
+    "full_name": "testuser/private-repo",
+    "html_url": "https://github.com/testuser/private-repo",
+    "clone_url": "https://github.com/testuser/private-repo.git",
+    "private": true,
+    "owner": {
+      "login": "testuser",
+      "id": 12345,
+      "type": "User"
+    },
+    "updated_at": "2023-01-20T09:15:00Z"
+  }
+]

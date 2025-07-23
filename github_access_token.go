@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/google/go-github/v50/github"
+	"golang.org/x/oauth2"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
@@ -23,7 +27,7 @@ func getGithubAccessToken() (string, error) {
 		return token, nil
 	}
 
-	return "", fmt.Errorf("no GitHub token found - run 'repo login' to authenticate with GitHub")
+	return "", fmt.Errorf("no GitHub token found - please run 'repo login' to authenticate")
 }
 
 func getStoredToken() (string, error) {
@@ -100,7 +104,7 @@ func promptForToken() (string, error) {
 
 	token := strings.TrimSpace(string(tokenBytes))
 	if token == "" {
-		return "", fmt.Errorf("no token provided")
+		return "", fmt.Errorf("please paste a valid GitHub token")
 	}
 
 	return token, nil
@@ -122,10 +126,10 @@ func runLogin() error {
 	// Verify the token works by making a simple API call
 	fmt.Print("Verifying token... ")
 	if err := verifyToken(token); err != nil {
-		fmt.Println("failed")
-		return fmt.Errorf("token verification failed: %w", err)
+		fmt.Println("✗")
+		return err
 	}
-	fmt.Println("success!")
+	fmt.Println("✓")
 
 	// Store the token
 	if err := storeToken(token); err != nil {
@@ -137,7 +141,28 @@ func runLogin() error {
 }
 
 func verifyToken(token string) error {
-	// For now, we skip verification to avoid circular dependencies
-	// The token will be validated when first used in the repos package
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+	client := github.NewClient(tc)
+
+	// Test the token by making a simple API call to get user info
+	_, resp, err := client.Users.Get(ctx, "")
+	if err != nil {
+		if resp != nil {
+			switch resp.StatusCode {
+			case http.StatusUnauthorized:
+				return fmt.Errorf("invalid GitHub token - please check that your token is correct and has the required permissions")
+			case http.StatusForbidden:
+				return fmt.Errorf("GitHub token lacks required permissions - please ensure your token has 'repo' and 'read:user' scopes")
+			default:
+				return fmt.Errorf("failed to verify token with GitHub API: %w", err)
+			}
+		}
+		return fmt.Errorf("failed to verify token with GitHub API: %w", err)
+	}
+
 	return nil
 }

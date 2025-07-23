@@ -95,22 +95,24 @@ func getGithubCLIToken() (string, error) {
 }
 
 func promptForToken() (string, error) {
-	fmt.Print("Paste your GitHub token (input will be hidden): ")
+	fmt.Print("📋 Paste your GitHub token (input will be hidden): ")
 	tokenBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
 	fmt.Println() // New line after password input
 	if err != nil {
-		return "", fmt.Errorf("could not read token: %w", err)
+		return "", fmt.Errorf("could not read token input: %w", err)
 	}
 
 	token := strings.TrimSpace(string(tokenBytes))
 	if token == "" {
-		return "", fmt.Errorf("please paste a valid GitHub token")
+		return "", fmt.Errorf("no token provided - please paste a valid GitHub token")
 	}
 
 	return token, nil
 }
 
 func runLogin() error {
+	fmt.Println("🔐 GitHub Authentication Setup")
+	fmt.Println("")
 	fmt.Println("To authenticate with GitHub, you need a personal access token.")
 	fmt.Println("")
 	fmt.Println("1. Go to: https://github.com/settings/tokens/new?scopes=repo,read:user&description=repo-cli")
@@ -120,23 +122,25 @@ func runLogin() error {
 
 	token, err := promptForToken()
 	if err != nil {
-		return err
+		return fmt.Errorf("❌ Token input failed: %w", err)
 	}
 
 	// Verify the token works by making a simple API call
-	fmt.Print("Verifying token... ")
+	fmt.Print("🔍 Verifying token... ")
 	if err := verifyToken(token); err != nil {
 		fmt.Println("✗")
+		fmt.Println("")
 		return err
 	}
 	fmt.Println("✓")
 
 	// Store the token
 	if err := storeToken(token); err != nil {
-		return fmt.Errorf("failed to store token: %w", err)
+		return fmt.Errorf("❌ Failed to store token: %w", err)
 	}
 
-	fmt.Println("Authentication successful! You can now use the repo command.")
+	fmt.Println("")
+	fmt.Println("✅ Authentication successful! You can now use the repo command.")
 	return nil
 }
 
@@ -154,14 +158,14 @@ func verifyToken(token string) error {
 		if resp != nil {
 			switch resp.StatusCode {
 			case http.StatusUnauthorized:
-				return fmt.Errorf("invalid GitHub token - please check that your token is correct and has the required permissions")
+				return fmt.Errorf("❌ Invalid GitHub token\n   The token you provided is not valid or has expired.\n   Please generate a new token at: https://github.com/settings/tokens/new?scopes=repo,read:user&description=repo-cli")
 			case http.StatusForbidden:
-				return fmt.Errorf("GitHub token lacks required permissions - please ensure your token has 'repo' and 'read:user' scopes")
+				return fmt.Errorf("❌ Insufficient permissions\n   Your GitHub token lacks required permissions.\n   Please ensure your token has 'repo' and 'read:user' scopes.\n   Generate a new token at: https://github.com/settings/tokens/new?scopes=repo,read:user&description=repo-cli")
 			default:
-				return fmt.Errorf("failed to verify token with GitHub API: %w", err)
+				return fmt.Errorf("❌ GitHub API error\n   Failed to verify token: %v\n   Please check your internet connection and try again", err)
 			}
 		}
-		return fmt.Errorf("failed to verify token with GitHub API: %w", err)
+		return fmt.Errorf("❌ Network error\n   Could not connect to GitHub API: %v\n   Please check your internet connection and try again", err)
 	}
 
 	return nil

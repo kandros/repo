@@ -13,7 +13,7 @@ type RepoOptions struct {
 	NumberOfResults int
 }
 
-func GetRepos(githubAccessToken string, repoOpts RepoOptions, publicOnly bool) ([]*github.Repository, error) {
+func GetRepos(githubAccessToken string, repoOpts RepoOptions, publicOnly bool, includeOrgRepos bool) ([]*github.Repository, error) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: githubAccessToken},
@@ -21,8 +21,13 @@ func GetRepos(githubAccessToken string, repoOpts RepoOptions, publicOnly bool) (
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
+	affiliation := "owner"
+	if includeOrgRepos {
+		affiliation = "owner,organization_member"
+	}
+
 	opts := &github.RepositoryListOptions{
-		Affiliation: "owner,organization_member",
+		Affiliation: affiliation,
 		Sort:        "updated",
 		Direction:   "desc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: repoOpts.NumberOfResults},

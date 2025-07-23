@@ -32,9 +32,11 @@ func main() {
 	}
 
 	onlyPublicRepository := flag.Bool("p", false, "Set to true to only list public repositories")
+	includeOrgRepos := flag.Bool("all", false, "Include repositories from organizations you're a member of")
+	flag.BoolVar(includeOrgRepos, "A", false, "Include repositories from organizations you're a member of (short)")
 
 	flag.Parse()
-	repoList, err := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository)
+	repoList, err := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository, *includeOrgRepos)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

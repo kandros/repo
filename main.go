@@ -31,10 +31,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	onlyPublicRepository := flag.Bool("p", false, "Set to true to only list public repositories")
+	allowPrivate := flag.Bool("p", false, "Include private repositories in the list")
+	allowPrivateAlias := flag.Bool("private", false, "Include private repositories in the list")
+	includeOrgRepos := flag.Bool("A", false, "Include repositories from organizations you're a member of")
+	includeOrgReposAlias := flag.Bool("all", false, "Include repositories from organizations you're a member of")
 
 	flag.Parse()
-	repoList, err := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, *onlyPublicRepository)
+	
+	// Use either flag for allowPrivate
+	showPrivate := *allowPrivate || *allowPrivateAlias
+	// Use either flag for includeOrgRepos
+	showOrgRepos := *includeOrgRepos || *includeOrgReposAlias
+	
+	repoList, err := repos.GetRepos(token, repos.RepoOptions{NumberOfResults: 20}, showPrivate, showOrgRepos)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
